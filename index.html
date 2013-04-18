@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Legevakter</title>
+    <link href="css/healthservices.css" media="all" rel="stylesheet" type="text/css"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="js/underscore-1.1.6.js"></script>
+    <script src="http://www.parsecdn.com/js/parse-1.1.15.min.js"></script>
+    <script src="js/healthservices.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Health Services App Interface -->
+
+    <div id="healthserviceapp">
+      <div class="title">
+        <h1>Legevakter</h1>
+      </div>
+
+      <div class="content">
+      </div>
+    </div>
+
+    <div id="credits">
+      Powered by <a href="https://www.parse.com">Parse</a> using the <a href="https://www.parse.com/docs/js_guide">JavaScript SDK</a>
+    </div>
+
+    <!-- Templates -->
+
+    <script type="text/template" id="health-service-template">
+      <li>
+        <div class="view">
+          <p><%= HealthServiceDisplayName %></p>
+        </div>
+      </li>
+    </script>
+
+    <script type="text/template" id="health-services-near-you-template">
+      <div class="section">
+        <header id="header">
+          <h2>... nær deg</h2>
+        </header>
+
+        <div id="main">
+          <ul id="health-services-list">
+            <img src="images/spinner.gif" class="spinner" />
+          </ul>
+        </div>
+      </div>
+    </script>
+
+  </body>
+
+</html>
