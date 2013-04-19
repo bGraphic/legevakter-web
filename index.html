@@ -3,6 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>Legevakter</title>
+    <link href="css/reset.css" media="all" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/base/base-min.css">
     <link href="css/healthservices.css" media="all" rel="stylesheet" type="text/css"/>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="js/underscore-1.1.6.js"></script>
@@ -32,7 +34,7 @@
     <script type="text/template" id="health-service-template">
       <li>
         <div class="view">
-          <p><%= HealthServiceDisplayName %></p>
+          <label><%= HealthServiceDisplayName %></label>
         </div>
       </li>
     </script>
@@ -40,7 +42,7 @@
     <script type="text/template" id="health-services-near-you-template">
       <div class="section">
         <header id="header">
-          <h2>... nær deg</h2>
+          <input id="search" placeholder="Søk etter legevakter" type="text" />
         </header>
 
         <div id="main">

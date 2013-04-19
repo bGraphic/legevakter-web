@@ -55,13 +55,19 @@ $(function() {
 	var HealthServicesNearYou = Parse.View.extend({
 		el: ".content",
 
+		events: {
+			"keypress #search": "searchOnEnter"
+		},
+
 		initialize: function() {
 			var self = this;
 
-			_.bindAll(this, 'addOne', 'addAll', 'render');
+			_.bindAll(this, 'addOne', 'addAll', 'render', 'searchOnEnter');
 
 			// Template
 			this.$el.html(_.template($("#health-services-near-you-template").html()));
+
+			this.input = this.$("#search");
 
 			this.healthServices = new HealthServiceList();
 
@@ -101,6 +107,17 @@ $(function() {
 		addAll: function(collection, filter) {
 			this.$("#health-services-list").html("");
 			this.healthServices.each(this.addOne);
+		},
+		searchOnEnter: function(e) {
+			var self = this;
+			if (e.keyCode != 13) return;
+
+			var searchString = this.input.val().toLowerCase();
+			self.healthServices.query = new Parse.Query(HealthService);
+			self.healthServices.query.contains("HealthServiceDisplayNameLowerCase",
+				searchString);
+
+			self.healthServices.fetch();
 		}
 	});
 
