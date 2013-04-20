@@ -15,16 +15,22 @@ $(function() {
 
 	});
 
-	var AppState = Parse.Object.extend("AppState", {
-		defaults: {
+	var LocationName = Parse.Object.extend("LocationName", {
 
-		}
+	});
+
+	var AppState = Parse.Object.extend("AppState", {
+
 	});
 
 	// HealthService Collection
 	// ------------------------
 	var HealthServiceList = Parse.Collection.extend({
 		model: HealthService
+	});
+
+	var LocationNameList = Parse.Collection.extend({
+		model: LocationName
 	});
 
 	// HealthService View
@@ -48,12 +54,30 @@ $(function() {
 		}
 	});
 
+	var LocationNameView = Parse.View.extend({
+
+		tagName: "div",
+
+		template: _.template($("#location-name-template").html()),
+
+		initialize: function() {
+			_.bindAll(this, 'render');
+		},
+
+		render: function() {
+
+			console.log("Attempting to render LocationNameView");
+			$(this.el).html(this.template(this.model.toJSON()));
+			return this;
+		}
+	});
+
 	// The Application
 	// ---------------
 
 	// Health Services Near You
 	var HealthServicesNearYou = Parse.View.extend({
-		el: ".content",
+		el: ".health-services",
 
 		events: {
 			"keypress #search": "searchOnEnter"
@@ -62,7 +86,7 @@ $(function() {
 		initialize: function() {
 			var self = this;
 
-			_.bindAll(this, 'addOne', 'addAll', 'render', 'searchOnEnter');
+			_.bindAll(this, 'addOne', 'addAll', 'searchOnEnter');
 
 			// Template
 			this.$el.html(_.template($("#health-services-near-you-template").html()));
@@ -73,7 +97,8 @@ $(function() {
 
 			this.healthServices.bind('add', this.addOne);
 			this.healthServices.bind('reset', this.addAll);
-			this.healthServices.bind('all', this.render);
+
+			
 
 
 			Parse.GeoPoint.current({
@@ -85,7 +110,7 @@ $(function() {
 					self.healthServices.fetch();
 				},
 				error: function(error) {
-					console.log("Error: " + error);
+					console.log("Error: " + error.message);
 
 					self.healthServices.query = new Parse.Query(HealthService);
 					self.healthServices.query.limit(10);
@@ -94,10 +119,6 @@ $(function() {
 				}
 			});
 
-		},
-
-		render: function() {
-			this.delegateEvents();
 		},
 
 		addOne: function(healthService) {
@@ -113,11 +134,89 @@ $(function() {
 			if (e.keyCode != 13) return;
 
 			var searchString = this.input.val().toLowerCase();
-			self.healthServices.query = new Parse.Query(HealthService);
-			self.healthServices.query.contains("HealthServiceDisplayNameLowerCase",
-				searchString);
 
-			self.healthServices.fetch();
+			Parse.Cloud.run("searchForHealthServicesWithString", 
+				{ "searchString": searchString }, {
+					success: function(results) {
+						self.healthServices.reset(results.searchStringInNameHealthServices);
+						var locationResults = results.searchStringInLocationNameHealthServices;
+						console.log("locationResults in success:" + locationResults.length);
+						self.locationNameView = new LocationNameResultsView();
+						self.locationNameView.setLocationNames(locationResults);
+
+						for(i=0;i<locationResults.length;i++) {
+							var locationNameHealthServicesView = new LocationNameHealthServicesView();
+							locationNameHealthServicesView.populate(locationResults[i]);		
+						}
+					},
+					error: function(error) {
+						console.log("error: " + error.message);
+					}
+				});
+		}
+	});
+
+	var LocationNameResultsView = Parse.View.extend({
+		el: ".location-names",
+
+		setLocationNames: function(locationNames) {
+		 	console.log("locationNames in setLocationNames: " + locationNames.length);
+		 	this.locationNameList.reset(locationNames);
+		},
+
+		initialize: function() {
+			var self = this;
+			_.bindAll(this, 'addOne', 'addAll');
+
+			this.$el.html(_.template($("#location-name-result-template").html()));
+
+			this.locationNameList = new LocationNameList();
+
+			this.locationNameList.bind('add', this.addOne);
+			this.locationNameList.bind('reset', this.addAll);
+
+		},
+
+		addOne: function(locationName) {
+			console.log("Attempting to addOne in LocationNameView");
+			var view = new LocationNameView({model: locationName});
+			this.$("#location-name-results").append(view.render().el);
+		},
+		addAll: function(collection, filter) {
+			this.$("#location-name-results").html("");
+			this.locationNameList.each(this.addOne);
+		}
+	});
+
+	var LocationNameHealthServicesView = Parse.View.extend({
+		el: ".location-names",
+
+		populate: function(locationName) {
+			console.log("Attempting to populate in LocationNameHealthServicesView");
+			this.canonical = "#location-name-results-" + locationName.locationId;
+			console.log("Canonical: " + this.canonical);
+			this.healthServiceList.reset(locationName.healthServices);
+		},
+
+		initialize: function() {
+			var self = this;
+			_.bindAll(this, 'addOne', 'addAll');
+			
+			this.healthServiceList = new HealthServiceList();
+
+			this.healthServiceList.bind('add', this.addOne);
+			this.healthServiceList.bind('reset', this.addAll);
+		},
+
+		addOne: function(healthService) {
+			console.log("Attempting to add one in LocationNameHealthServicesView");
+			var view = new HealthServiceView({model: healthService});
+			this.$(this.canonical).append(view.render().el);
+		},
+		addAll: function(collection, filter) {
+			console.log("Attempting to add all in LocationNameHealthServicesView");
+			this.$(this.canonical).html("");
+			this.healthServiceList.each(this.addOne);
 		}
 	});
 

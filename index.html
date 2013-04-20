@@ -21,8 +21,13 @@
         <h1>Legevakter</h1>
       </div>
 
-      <div class="content">
+      <div class="health-services">
       </div>
+
+      <div class="location-names">
+      </div>
+
+
     </div>
 
     <div id="credits">
@@ -46,10 +51,30 @@
         </header>
 
         <div id="main">
-          <ul id="health-services-list">
+          <ul id="health-services-list" class="health-services-list">
             <img src="images/spinner.gif" class="spinner" />
           </ul>
         </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="location-name-template">
+      <div class="section">
+        <header id="header">
+          <h2 class="header-location-name">Søketreff på: <%= locationName %></h2>
+        </header>
+
+        <div id="main">
+          <ul id="location-name-results-<%= locationId %>" class="health-services-list">
+            <img src="images/spinner.gif" class="spinner" />
+          </ul>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="location-name-result-template">
+      <div id="location-name-results">
+
       </div>
     </script>
 

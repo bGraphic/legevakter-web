@@ -136,12 +136,17 @@ body {
     font-smoothing: antialiased;
 }
 
-#search {
+#search,
+.header-location-name {
     padding: 16px 16px 16px 60px;
     border: none;
     background: rgba(0, 0, 0, 0.02);
     z-index: 2;
     box-shadow: none;
+}
+
+h2.header-location-name {
+    margin:0;
 }
 
 #main {
@@ -182,45 +187,45 @@ label[for='toggle-all'] {
     color: #737373;
 }
 
-#health-services-list {
+.health-services-list {
     margin: 0;
     padding: 0;
     list-style: none;
     text-align: center;
 }
 
-#health-services-list .spinner {
+.health-services-list .spinner {
     margin: 15px auto;
 }
 
-#health-services-list li {
+.health-services-list li {
     text-align: left;
     position: relative;
     font-size: 24px;
     border-bottom: 1px dotted #ccc;
 }
 
-#health-services-list li:last-child {
+.health-services-list li:last-child {
     border-bottom: none;
 }
 
-#health-services-list li.editing {
+.health-services-list li.editing {
     border-bottom: none;
     padding: 0;
 }
 
-#health-services-list li.editing .edit {
+.health-services-list li.editing .edit {
     display: block;
     width: 506px;
     padding: 13px 17px 12px 17px;
     margin: 0 0 0 43px;
 }
 
-#health-services-list li.editing .view {
+.health-services-list li.editing .view {
     display: none;
 }
 
-#health-services-list li .toggle {
+.health-services-list li .toggle {
     text-align: center;
     width: 40px;
     height: 40px;
@@ -235,7 +240,7 @@ label[for='toggle-all'] {
     appearance: none;
 }
 
-#health-services-list li .toggle:after {
+.health-services-list li .toggle:after {
     font-size: 18px;
     content: '✔';
     line-height: 43px; /* 40 + a couple of pixels visual adjustment */
@@ -244,14 +249,14 @@ label[for='toggle-all'] {
     text-shadow: 0 -1px 0 #bfbfbf;
 }
 
-#health-services-list li .toggle:checked:after {
+.health-services-list li .toggle:checked:after {
     color: #85ada7;
     text-shadow: 0 1px 0 #669991;
     bottom: 1px;
     position: relative;
 }
 
-#health-services-list li label {
+.health-services-list li label {
     word-break: break-word;
     margin: 15px 15px 15px 60px;
     display: inline-block;
@@ -263,12 +268,12 @@ label[for='toggle-all'] {
     transition: color 0.4s;
 }
 
-#health-services-list li.completed label {
+.health-services-list li.completed label {
     color: #a9a9a9;
     text-decoration: line-through;
 }
 
-#health-services-list li .todo-destroy {
+.health-services-list li .todo-destroy {
     display: none;
     position: absolute;
     top: 0;
@@ -286,7 +291,7 @@ label[for='toggle-all'] {
     transition: all 0.2s;
 }
 
-#health-services-list li .todo-destroy:hover {
+.health-services-list li .todo-destroy:hover {
     text-shadow: 0 0 1px #000,
     0 0 10px rgba(199, 107, 107, 0.8);
     -webkit-transform: scale(1.3);
@@ -296,19 +301,19 @@ label[for='toggle-all'] {
     transform: scale(1.3);
 }
 
-#health-services-list li .todo-destroy:after {
+.health-services-list li .todo-destroy:after {
     content: '✖';
 }
 
-#health-services-list li:hover .todo-destroy {
+.health-services-list li:hover .todo-destroy {
     display: block;
 }
 
-#health-services-list li .edit {
+.health-services-list li .edit {
     display: none;
 }
 
-#health-services-list li.editing:last-child {
+.health-services-list li.editing:last-child {
     margin-bottom: -1px;
 }
 
@@ -401,7 +406,7 @@ label[for='toggle-all'] {
   */
 @media screen and (-webkit-min-device-pixel-ratio:0) {
     #toggle-all,
-    #health-services-list li .toggle {
+    .health-services-list li .toggle {
 	background: none;
     }
 }
