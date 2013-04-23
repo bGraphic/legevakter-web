@@ -47,6 +47,11 @@ $(function() {
 			_.bindAll(this, 'render');
 		},
 
+		distanceFromUserLocation: function() {
+			if (state.userLocation)
+				return "(" + this.model.get("geoPoint").kilometersTo(state.userLocation).toFixed(1) + "km)";
+		},
+
 		// Re-render the contents
 		render: function() {
 			$(this.el).html(this.template(this.model.toJSON()));
@@ -65,8 +70,6 @@ $(function() {
 		},
 
 		render: function() {
-
-			console.log("Attempting to render LocationNameView");
 			$(this.el).html(this.template(this.model.toJSON()));
 			return this;
 		}
@@ -103,7 +106,7 @@ $(function() {
 
 			Parse.GeoPoint.current({
 				success: function(geoPoint) {
-
+					state.userLocation = geoPoint;
 					self.healthServices.query = new Parse.Query(HealthService);
 					self.healthServices.query.withinKilometers("geoPoint", geoPoint, 25);
 
@@ -140,7 +143,6 @@ $(function() {
 					success: function(results) {
 						self.healthServices.reset(results.searchStringInNameHealthServices);
 						var locationResults = results.searchStringInLocationNameHealthServices;
-						console.log("locationResults in success:" + locationResults.length);
 						self.locationNameView = new LocationNameResultsView();
 						self.locationNameView.setLocationNames(locationResults);
 
@@ -160,7 +162,6 @@ $(function() {
 		el: ".location-names",
 
 		setLocationNames: function(locationNames) {
-		 	console.log("locationNames in setLocationNames: " + locationNames.length);
 		 	this.locationNameList.reset(locationNames);
 		},
 
@@ -178,7 +179,6 @@ $(function() {
 		},
 
 		addOne: function(locationName) {
-			console.log("Attempting to addOne in LocationNameView");
 			var view = new LocationNameView({model: locationName});
 			this.$("#location-name-results").append(view.render().el);
 		},
@@ -192,9 +192,7 @@ $(function() {
 		el: ".location-names",
 
 		populate: function(locationName) {
-			console.log("Attempting to populate in LocationNameHealthServicesView");
 			this.canonical = "#location-name-results-" + locationName.locationId;
-			console.log("Canonical: " + this.canonical);
 			this.healthServiceList.reset(locationName.healthServices);
 		},
 
@@ -209,12 +207,10 @@ $(function() {
 		},
 
 		addOne: function(healthService) {
-			console.log("Attempting to add one in LocationNameHealthServicesView");
 			var view = new HealthServiceView({model: healthService});
 			this.$(this.canonical).append(view.render().el);
 		},
 		addAll: function(collection, filter) {
-			console.log("Attempting to add all in LocationNameHealthServicesView");
 			this.$(this.canonical).html("");
 			this.healthServiceList.each(this.addOne);
 		}

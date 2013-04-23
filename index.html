@@ -3,7 +3,6 @@
   <head>
     <meta charset="utf-8">
     <title>Legevakter</title>
-    <link href="css/reset.css" media="all" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/base/base-min.css">
     <link href="css/healthservices.css" media="all" rel="stylesheet" type="text/css"/>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -39,7 +38,7 @@
     <script type="text/template" id="health-service-template">
       <li>
         <div class="view">
-          <label><%= HealthServiceDisplayName %></label>
+          <label><%= HealthServiceDisplayName %> <%= this.distanceFromUserLocation() %></label>
         </div>
       </li>
     </script>
