@@ -205,6 +205,14 @@ label[for='toggle-all'] {
     border-bottom: 1px dotted #ccc;
 }
 
+.health-services-list li.open .view {
+    background-color:#7CFC00;
+}
+
+.health-services-list li.closed .view {
+    background-color:#C14030;
+}
+
 .health-services-list li:last-child {
     border-bottom: none;
 }

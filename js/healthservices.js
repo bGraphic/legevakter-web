@@ -1,12 +1,20 @@
 
-// "Legevakter" is a Parse.js Backbone application
+// "Legevakter" is a Parse.com / Backbone.js application
 $(function() {
 
 	Parse.$ = jQuery;
 
 	// Initialize Parse
-	Parse.initialize("b8miWZyVIuwxB47cjOTa6ik6B5DiaO4bnZeVQgNA", 
-		"Xo3H0UKj36YYTZCo3fNmIvaOP5eAwIdr5XMUeZkH");
+
+	// Production
+	// Parse.initialize("b8miWZyVIuwxB47cjOTa6ik6B5DiaO4bnZeVQgNA", 
+	// 	"Xo3H0UKj36YYTZCo3fNmIvaOP5eAwIdr5XMUeZkH");
+
+	// Development
+	Parse.initialize("4DECQGbsZc1JkVLi02vuTlRdCaqmB49RC4EDaSIV", 
+		"kj3nbsej35OJXCIX1AlV1ILZH8rx8DIqLa1W6g4y");
+
+	var OpeningHours = OpeningHoursModule.OpeningHours;
 
 	// HealthService model
 	// -------------------
@@ -50,6 +58,14 @@ $(function() {
 		distanceFromUserLocation: function() {
 			if (state.userLocation)
 				return "(" + this.model.get("geoPoint").kilometersTo(state.userLocation).toFixed(1) + "km)";
+		},
+
+		openOrClosedClass: function() {
+			var openingHours = new OpeningHours(this.model.get("SmartOpeningHours"));
+			if (openingHours.isOpen())
+				return "open";
+			else
+				return "closed";
 		},
 
 		// Re-render the contents
