@@ -9,7 +9,7 @@
     <script src="js/underscore-1.1.6.js"></script>
     <script src="http://www.parsecdn.com/js/parse-1.1.15.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min.js"></script>
-    <script src="js/opening-hours-min.js"></script>
+    <script src="js/opening-hours.js"></script>
     <script src="js/healthservices.js"></script>
 
   </head>
@@ -41,7 +41,18 @@
     <script type="text/template" id="health-service-template">
       <li class="<%= this.openOrClosedClass() %>">
         <div class="view">
-          <label><%= HealthServiceDisplayName %> <%= this.distanceFromUserLocation() %></label>
+          <label>
+            <p>
+              <%= HealthServiceDisplayName %> 
+              <%= this.distanceFromUserLocation() %> 
+            </p>
+            <p style="font-size:50%">
+              <%= this.formattedAddress() %>
+            </p>
+            <p style="font-size:50%;">
+            <%= this.formattedOpeningHours() %>
+            </p>
+          </label>
         </div>
       </li>
     </script>

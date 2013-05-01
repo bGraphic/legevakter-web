@@ -15,6 +15,10 @@ $(function() {
 		"kj3nbsej35OJXCIX1AlV1ILZH8rx8DIqLa1W6g4y");
 
 	var OpeningHours = OpeningHoursModule.OpeningHours;
+	var OpeningHoursFormatter = OpeningHoursModule.OpeningHoursFormatter;
+	var openingHoursFormatter = new OpeningHoursFormatter({
+		separator: "<br />"
+	});
 
 	// HealthService model
 	// -------------------
@@ -52,6 +56,9 @@ $(function() {
 		template: _.template($('#health-service-template').html()),
 
 		initialize: function() {
+
+			this.openingHours = new OpeningHours(this.model.get("SmartOpeningHours"));
+
 			_.bindAll(this, 'render');
 		},
 
@@ -61,11 +68,23 @@ $(function() {
 		},
 
 		openOrClosedClass: function() {
-			var openingHours = new OpeningHours(this.model.get("SmartOpeningHours"));
-			if (openingHours.isOpen())
+			if (this.openingHours.isOpen())
 				return "open";
 			else
 				return "closed";
+		},
+
+		formattedAddress: function() {
+			var string = this.model.get("VisitAddressStreet");
+			string += ', ';
+			string += this.model.get("VisitAddressPostNr");
+			string += ' ';
+			string += this.model.get("VisitAddressPostName")
+			return string;
+		},
+
+		formattedOpeningHours: function() {
+			return openingHoursFormatter.formattedOpeningHours(this.openingHours);	
 		},
 
 		// Re-render the contents
@@ -132,7 +151,7 @@ $(function() {
 					console.log("Error: " + error.message);
 
 					self.healthServices.query = new Parse.Query(HealthService);
-					self.healthServices.query.limit(10);
+					self.healthServices.query.limit(270);
 
 					self.healthServices.fetch();
 				}
